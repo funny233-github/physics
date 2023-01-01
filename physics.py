@@ -1,6 +1,6 @@
 import matplotlib.pyplot
 import numpy
-
+from tqdm import tqdm
 
 class physic:
     G = 1.0  #引力常量1.0
@@ -50,7 +50,7 @@ class physic:
 
 
 #三体样例函数
-def example():
+def example1():
     #三体参数
     the_location = numpy.array([[-1.1889693067, 0.0], [3.8201881837, 0.0],
                                 [-2.631218877, 0.0]])
@@ -64,22 +64,26 @@ def example():
     energy = []
     total_energy = []
     time = []
+    the_total = 10**7
 
-    for i in range(10**5*4):  #迭代数，也是tick总数
+    for i in range(the_total):  #迭代数，也是tick总数
         #system.tick(numpy.array([[0.0,-1.0],[-4.0,+1.0]]))
         system.tick(system.acceleration())
-        #x.append([system.location[x][0] for x in range(system.members)])
-        #y.append([system.location[x][1] for x in range(system.members)])
-        energy.append([system.dynatic_energy()[x] for x in range(system.members)])
-        total_energy.append(numpy.sum(system.dynatic_energy()))
-        time.append(i*system.accuracy)
+        if i % 10**2 == 0:#设置采样方式，减少内存占用
+            #x.append([system.location[x][0] for x in range(system.members)])
+            #y.append([system.location[x][1] for x in range(system.members)])
+            energy.append([system.dynatic_energy()[x] for x in range(system.members)])
+            total_energy.append(numpy.sum(system.dynatic_energy()))
+            time.append(i*system.accuracy)
 
         if i % 10**4 == 0:  #输出的数字需要符合的等式如1000,2000,3000
-            print(i/(10**5*4))
+            tqdm(total=the_total,desc="计算轨道",leave=True,unit="tick",unit_scale=True).update(i)
+            #print(i/(10**7))
     #matplotlib.pyplot.plot(x,y)
     matplotlib.pyplot.plot(time,energy)
     matplotlib.pyplot.plot(time,total_energy)
     matplotlib.pyplot.savefig("nomal.png")
 
-
-example()
+def example2():
+    print("hello")
+example1()
