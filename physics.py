@@ -42,7 +42,7 @@ class physic:
         energy = numpy.zeros([self.members])
         for the_object in range(self.members):
             v = self.modulus(self.v[the_object])
-            energy[the_object] += v
+            energy[the_object] += 0.5*self.m[the_object]*v**2
         return energy
 
     def modulus(self,vector):#向量模计算,vecotr指仅仅含有xy的向量
@@ -62,19 +62,23 @@ def example():
     x = []
     y = []
     energy = []
+    total_energy = []
     time = []
 
-    for i in range(10**6):  #迭代数，也是tick总数
+    for i in range(10**5*4):  #迭代数，也是tick总数
         #system.tick(numpy.array([[0.0,-1.0],[-4.0,+1.0]]))
         system.tick(system.acceleration())
         #x.append([system.location[x][0] for x in range(system.members)])
         #y.append([system.location[x][1] for x in range(system.members)])
         energy.append([system.dynatic_energy()[x] for x in range(system.members)])
+        total_energy.append(numpy.sum(system.dynatic_energy()))
         time.append(i*system.accuracy)
 
         if i % 10**4 == 0:  #输出的数字需要符合的等式如1000,2000,3000
-            print(i)
+            print(i/(10**5*4))
+    #matplotlib.pyplot.plot(x,y)
     matplotlib.pyplot.plot(time,energy)
+    matplotlib.pyplot.plot(time,total_energy)
     matplotlib.pyplot.savefig("nomal.png")
 
 
