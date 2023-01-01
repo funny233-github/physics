@@ -1,4 +1,5 @@
 # 前置依赖
+---
 
 本项目需要 Python3 作为运行环境！
 
@@ -7,6 +8,7 @@ python3 -m pip install numpy matplotlib
 ```
 
 # 使用方法
+---
 
 ## 三体问题数值模拟
 
@@ -25,3 +27,7 @@ python3 physics.py
 ```bash
 python3 collisions.py <质点A质量> <质点B质量>
 ```
+
+#更新
+---
+添加了`dynatic_energy`函数计算动能,添加`modulus`函数计算向量模
