@@ -61,15 +61,20 @@ def example1():
     )
     the_m = numpy.array([1.0, 1.0, 1.0])
 
+    # 初始化三体系统
     system = physic(the_location, the_v, the_m)
+
+    # 记录用的列表
     # x = []
     # y = []
     energy = []
     total_energy = []
     time = []
-    the_total = 10**7
+
+    # 总tick数
+    the_total = 10**5
     # 进度条更新间隔
-    UPDATE_INTERVAL = 10**4
+    STEP = 10**4
 
     # 进度条对象，必须在同一个对象上更新才有效果
     progress = tqdm(
@@ -77,8 +82,10 @@ def example1():
     )
 
     for i in range(1, the_total + 1):  # 迭代数，也是tick总数
+
         # system.tick(numpy.array([[0.0,-1.0],[-4.0,+1.0]]))
         system.tick(system.acceleration())
+
         if i % 10**2 == 0:  # 设置采样方式，减少内存占用
             # x.append([system.location[x][0] for x in range(system.members)])
             # y.append([system.location[x][1] for x in range(system.members)])
@@ -86,17 +93,15 @@ def example1():
             total_energy.append(numpy.sum(system.dynatic_energy()))
             time.append(i * system.accuracy)
 
-        if i % UPDATE_INTERVAL == 0:  # 输出的数字需要符合的等式如1000,2000,3000
+        if i % STEP == 0:
             # .update() 方法的参数值是进度条的更新增量
-            # 不是更新后的目标值！
-            progress.update(UPDATE_INTERVAL)
-            # print(i/(10**7))
-    # 进度条使用完毕后，需要主动关闭进度条，恢复终端效果
-    progress.close()
+            progress.update(STEP)
+
+    progress.close()  # 关闭进度条
     # matplotlib.pyplot.plot(x,y)
     matplotlib.pyplot.plot(time, energy)
     matplotlib.pyplot.plot(time, total_energy)
-    matplotlib.pyplot.savefig("nomal.png")
+    matplotlib.pyplot.savefig("example1.png")
 
 
 def example2():
