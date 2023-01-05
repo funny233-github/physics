@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 class physic:
     G = 1.0  # 引力常量1.0
-    accuracy = 10**-5
+    accuracy = 10**-4
 
     def __init__(self, location, v, m):  # m质量,location坐标
         self.location = location
@@ -105,7 +105,32 @@ def example1():
 
 
 def example2():
-    print("hello")
+    member = 10
+    the_location = numpy.random.randn(member, 2)
+    the_v = numpy.random.randn(member, 2)
+    the_m = numpy.random.randn(member)
+
+    system = physic(the_location, the_v, the_m)
+
+    x = []
+    y = []
+
+    the_total = 10**5
+    STEP = 10**4
+
+    progress = tqdm(
+        total=the_total, desc="计算轨道", leave=False, unit="tick", unit_scale=True
+    )
+    for i in range(1, the_total + 1):
+        system.tick(system.acceleration())
+        if i % 10**2 == 0:
+            x.append([system.location[x][0] for x in range(system.members)])
+            y.append([system.location[x][1] for x in range(system.members)])
+        if i % STEP == 0:
+            progress.update(STEP)
+    progress.close()
+    matplotlib.pyplot.plot(x, y)
+    matplotlib.pyplot.savefig("example2.png")
 
 
-example1()
+example2()
