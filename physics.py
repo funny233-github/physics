@@ -20,16 +20,14 @@ class physic:
     def gravitation(self):  # 引力函数
         vector = numpy.zeros([self.members, 2])
         for first_object in range(self.members):
-            for second_object in range(self.members):
-                if second_object == first_object:
-                    continue
+            for second_object in range(first_object+1,self.members):
                 second_m = self.m[second_object]
                 vector_d = self.location[second_object] - self.location[first_object]
                 d = self.modulus(vector_d)
-                vector[first_object] += vector_d * second_m / d**3
-            first_m = self.m[first_object]
-            vector[first_object] *= first_m * self.G
-        return vector
+                first_m = self.m[first_object]
+                vector[first_object] += vector_d * first_m * second_m / d**3
+                vector[second_object] += -vector[first_object]
+        return vector*self.G
 
     def acceleration(self):  # 引力替换成加速度
         acceleration = numpy.zeros([self.members, 2])
@@ -65,11 +63,11 @@ def example1():
     system = physic(the_location, the_v, the_m)
 
     # 记录用的列表
-    # x = []
-    # y = []
-    energy = []
-    total_energy = []
-    time = []
+    x = []
+    y = []
+    #energy = []
+    #total_energy = []
+    #time = []
 
     # 总tick数
     the_total = 10**5
@@ -83,24 +81,23 @@ def example1():
 
     for i in range(1, the_total + 1):  # 迭代数，也是tick总数
 
-        # system.tick(numpy.array([[0.0,-1.0],[-4.0,+1.0]]))
         system.tick(system.acceleration())
 
         if i % 10**2 == 0:  # 设置采样方式，减少内存占用
-            # x.append([system.location[x][0] for x in range(system.members)])
-            # y.append([system.location[x][1] for x in range(system.members)])
-            energy.append([system.dynatic_energy()[x] for x in range(system.members)])
-            total_energy.append(numpy.sum(system.dynatic_energy()))
-            time.append(i * system.accuracy)
+            x.append([system.location[x][0] for x in range(system.members)])
+            y.append([system.location[x][1] for x in range(system.members)])
+            #energy.append([system.dynatic_energy()[x] for x in range(system.members)])
+            #total_energy.append(numpy.sum(system.dynatic_energy()))
+            #time.append(i * system.accuracy)
 
         if i % STEP == 0:
             # .update() 方法的参数值是进度条的更新增量
             progress.update(STEP)
 
     progress.close()  # 关闭进度条
-    # matplotlib.pyplot.plot(x,y)
-    matplotlib.pyplot.plot(time, energy)
-    matplotlib.pyplot.plot(time, total_energy)
+    matplotlib.pyplot.plot(x,y)
+    # matplotlib.pyplot.plot(time, energy)
+    # matplotlib.pyplot.plot(time, total_energy)
     matplotlib.pyplot.savefig("example1.png")
 
 
@@ -131,6 +128,5 @@ def example2():
     progress.close()
     matplotlib.pyplot.plot(x, y)
     matplotlib.pyplot.savefig("example2.png")
-
 
 example2()
