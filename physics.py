@@ -15,9 +15,9 @@ class physic:
 
     def tick(self, a):  # a加速度向量,accuracy精度
         self.location += self.v * self.accuracy
-        self.v += a * self.accuracy
+        self.v +=a * self.accuracy
 
-    def gravitation(self):  # 引力函数
+    def gravitation_acceleration(self):  # 引力加速度函数
         vector = numpy.zeros([self.members, 2])
         for first_object in range(self.members):
             for second_object in range(first_object+1,self.members):
@@ -25,17 +25,17 @@ class physic:
                 vector_d = self.location[second_object] - self.location[first_object]
                 d = self.modulus(vector_d)
                 first_m = self.m[first_object]
-                vector[first_object] += vector_d * first_m * second_m / d**3
-                vector[second_object] += -vector[first_object]
+                vector[first_object] += vector_d * second_m / d**3
+                vector[second_object] += -vector[first_object] * first_m / second_m
         return vector*self.G
 
-    def acceleration(self):  # 引力替换成加速度
-        acceleration = numpy.zeros([self.members, 2])
-        for the_object in range(self.members):
-            acceleration[the_object] = (
-                self.gravitation()[the_object] / self.m[the_object]
-            )
-        return acceleration
+#    def acceleration(self):  # 引力替换成加速度
+#        acceleration = numpy.zeros([self.members, 2])
+#        for the_object in range(self.members):
+#            acceleration[the_object] = (
+#                self.gravitation()[the_object] / self.m[the_object]
+#            )
+#        return acceleration
 
     def dynatic_energy(self):  # 动能计算
         energy = numpy.zeros([self.members])
@@ -80,8 +80,7 @@ def example1():
     )
 
     for i in range(1, the_total + 1):  # 迭代数，也是tick总数
-
-        system.tick(system.acceleration())
+        system.tick(system.gravitation_acceleration())
 
         if i % 10**2 == 0:  # 设置采样方式，减少内存占用
             x.append([system.location[x][0] for x in range(system.members)])
@@ -99,8 +98,7 @@ def example1():
     # matplotlib.pyplot.plot(time, energy)
     # matplotlib.pyplot.plot(time, total_energy)
     matplotlib.pyplot.savefig("example1.png")
-
-
+  
 def example2():
     member = 10
     the_location = numpy.random.randn(member, 2)
@@ -118,8 +116,8 @@ def example2():
     progress = tqdm(
         total=the_total, desc="计算轨道", leave=False, unit="tick", unit_scale=True
     )
-    for i in range(1, the_total + 1):
-        system.tick(system.acceleration())
+    for i in range(1, the_total + 1):        
+        system.tick(system.gravitation_acceleration())
         if i % 10**2 == 0:
             x.append([system.location[x][0] for x in range(system.members)])
             y.append([system.location[x][1] for x in range(system.members)])
