@@ -29,13 +29,13 @@ class physic:
                 vector[second_object] += -vector[first_object] * first_m / second_m
         return vector*self.G
 
-#    def acceleration(self):  # 引力替换成加速度
-#        acceleration = numpy.zeros([self.members, 2])
-#        for the_object in range(self.members):
-#            acceleration[the_object] = (
-#                self.gravitation()[the_object] / self.m[the_object]
-#            )
-#        return acceleration
+    def acceleration(self,vector_force):  # (alpha)力替换成加速度
+        acceleration = numpy.zeros([self.members, 2])
+        for the_object in range(self.members):
+            acceleration[the_object] = (
+                vector_force()[the_object] / self.m[the_object]
+            )
+        return acceleration
 
     def dynatic_energy(self):  # 动能计算
         energy = numpy.zeros([self.members])
@@ -47,6 +47,13 @@ class physic:
     def modulus(self, vector):  # 向量模计算,vecotr指仅仅含有xy的向量
         return (vector[0] ** 2 + vector[1] ** 2) ** 0.5
 
+    def center_m(self):
+        vector_center = numpy.zeros(2)
+        M = 0
+        for i in range(self.members):
+            vector_center += self.m[i] * self.location[i]
+            M += self.m[i]
+        return vector_center/M
 
 # 三体样例函数
 def example1():
@@ -65,12 +72,14 @@ def example1():
     # 记录用的列表
     x = []
     y = []
+    cx = []
+    cy = []
     #energy = []
     #total_energy = []
     #time = []
 
     # 总tick数
-    the_total = 10**5
+    the_total = 10**6
     # 进度条更新间隔
     STEP = 10**4
 
@@ -85,6 +94,8 @@ def example1():
         if i % 10**2 == 0:  # 设置采样方式，减少内存占用
             x.append([system.location[x][0] for x in range(system.members)])
             y.append([system.location[x][1] for x in range(system.members)])
+            cx.append(system.center_m()[0])
+            cy.append(system.center_m()[1])
             #energy.append([system.dynatic_energy()[x] for x in range(system.members)])
             #total_energy.append(numpy.sum(system.dynatic_energy()))
             #time.append(i * system.accuracy)
@@ -93,14 +104,15 @@ def example1():
             # .update() 方法的参数值是进度条的更新增量
             progress.update(STEP)
 
-    progress.close()  # 关闭进度条
+    #progress.close()  # 关闭进度条
     matplotlib.pyplot.plot(x,y)
+    matplotlib.pyplot.plot(cx,cy)
     # matplotlib.pyplot.plot(time, energy)
     # matplotlib.pyplot.plot(time, total_energy)
     matplotlib.pyplot.savefig("example1.png")
   
 def example2():
-    member = 10
+    member = 30
     the_location = numpy.random.randn(member, 2)
     the_v = numpy.random.randn(member, 2)
     the_m = numpy.random.randn(member)
@@ -111,7 +123,7 @@ def example2():
     y = []
 
     the_total = 10**5
-    STEP = 10**4
+    STEP = 10**2
 
     progress = tqdm(
         total=the_total, desc="计算轨道", leave=False, unit="tick", unit_scale=True
@@ -123,8 +135,8 @@ def example2():
             y.append([system.location[x][1] for x in range(system.members)])
         if i % STEP == 0:
             progress.update(STEP)
-    progress.close()
+    #progress.close()
     matplotlib.pyplot.plot(x, y)
     matplotlib.pyplot.savefig("example2.png")
 
-example2()
+example1()
