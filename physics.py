@@ -72,8 +72,6 @@ def example1():
     # 记录用的列表
     x = []
     y = []
-    cx = []
-    cy = []
     #energy = []
     #total_energy = []
     #time = []
@@ -94,8 +92,6 @@ def example1():
         if i % 10**2 == 0:  # 设置采样方式，减少内存占用
             x.append([system.location[x][0] for x in range(system.members)])
             y.append([system.location[x][1] for x in range(system.members)])
-            cx.append(system.center_m()[0])
-            cy.append(system.center_m()[1])
             #energy.append([system.dynatic_energy()[x] for x in range(system.members)])
             #total_energy.append(numpy.sum(system.dynatic_energy()))
             #time.append(i * system.accuracy)
@@ -104,9 +100,7 @@ def example1():
             # .update() 方法的参数值是进度条的更新增量
             progress.update(STEP)
 
-    #progress.close()  # 关闭进度条
     matplotlib.pyplot.plot(x,y)
-    matplotlib.pyplot.plot(cx,cy)
     # matplotlib.pyplot.plot(time, energy)
     # matplotlib.pyplot.plot(time, total_energy)
     matplotlib.pyplot.savefig("example1.png")
@@ -135,7 +129,6 @@ def example2():
             y.append([system.location[x][1] for x in range(system.members)])
         if i % STEP == 0:
             progress.update(STEP)
-    #progress.close()
     matplotlib.pyplot.plot(x, y)
     matplotlib.pyplot.savefig("example2.png")
 
