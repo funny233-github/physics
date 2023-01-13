@@ -1,4 +1,4 @@
-import physics
+import package.physics as physics
 import numpy
 import matplotlib
 from tqdm import tqdm
