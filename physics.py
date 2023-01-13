@@ -5,13 +5,13 @@ from tqdm import tqdm
 
 class physic:
     G = 1.0  # 引力常量1.0
-    accuracy = 10**-4
+    accuracy = 10**-4  #精度
 
-    def __init__(self, location, v, m):  # m质量,location坐标
+    def __init__(self, location, v, m):  # m质量,location坐标,v速度向量,members对象数量
         self.location = location
         self.v = v
         self.m = m
-        self.members = len(location)  # 获取总共有都少要计算的物体数
+        self.members = len(location)
 
     def tick(self, a):  # a加速度向量,accuracy精度
         self.location += self.v * self.accuracy
@@ -44,92 +44,19 @@ class physic:
             energy[the_object] += 0.5 * self.m[the_object] * v**2
         return energy
 
+    def momentum(self):  # 动量计算
+        vector_momentum = numpy.zeros([self.members, 2])
+        for the_object in range(self.members):
+            vector_momentum[the_object] += self.v[the_object] * self.m[the_object]
+        return vector_momentum
+
     def modulus(self, vector):  # 向量模计算,vecotr指仅仅含有xy的向量
         return (vector[0] ** 2 + vector[1] ** 2) ** 0.5
 
-    def center_m(self):
+    def center_m(self): #质点计算
         vector_center = numpy.zeros(2)
         M = 0
         for i in range(self.members):
             vector_center += self.m[i] * self.location[i]
             M += self.m[i]
         return vector_center/M
-
-# 三体样例函数
-def example1():
-    # 三体参数
-    the_location = numpy.array(
-        [[-1.1889693067, 0.0], [3.8201881837, 0.0], [-2.631218877, 0.0]]
-    )
-    the_v = numpy.array(
-        [[0.0, 0.8042120498], [0.0, 0.0212794833], [0.0, -0.8254915331]]
-    )
-    the_m = numpy.array([1.0, 1.0, 1.0])
-
-    # 初始化三体系统
-    system = physic(the_location, the_v, the_m)
-
-    # 记录用的列表
-    x = []
-    y = []
-    #energy = []
-    #total_energy = []
-    #time = []
-
-    # 总tick数
-    the_total = 10**6
-    # 进度条更新间隔
-    STEP = 10**4
-
-    # 进度条对象，必须在同一个对象上更新才有效果
-    progress = tqdm(
-        total=the_total, desc="计算轨道", leave=False, unit="tick", unit_scale=True
-    )
-
-    for i in range(1, the_total + 1):  # 迭代数，也是tick总数
-        system.tick(system.gravitation_acceleration())
-
-        if i % 10**2 == 0:  # 设置采样方式，减少内存占用
-            x.append([system.location[x][0] for x in range(system.members)])
-            y.append([system.location[x][1] for x in range(system.members)])
-            #energy.append([system.dynatic_energy()[x] for x in range(system.members)])
-            #total_energy.append(numpy.sum(system.dynatic_energy()))
-            #time.append(i * system.accuracy)
-
-        if i % STEP == 0:
-            # .update() 方法的参数值是进度条的更新增量
-            progress.update(STEP)
-
-    matplotlib.pyplot.plot(x,y)
-    # matplotlib.pyplot.plot(time, energy)
-    # matplotlib.pyplot.plot(time, total_energy)
-    matplotlib.pyplot.savefig("example1.png")
-  
-def example2():
-    member = 30
-    the_location = numpy.random.randn(member, 2)
-    the_v = numpy.random.randn(member, 2)
-    the_m = numpy.random.randn(member)
-
-    system = physic(the_location, the_v, the_m)
-
-    x = []
-    y = []
-
-    the_total = 10**5
-    STEP = 10**2
-
-    progress = tqdm(
-        total=the_total, desc="计算轨道", leave=False, unit="tick", unit_scale=True
-    )
-    for i in range(1, the_total + 1):        
-        system.tick(system.gravitation_acceleration())
-        if i % 10**2 == 0:
-            x.append([system.location[x][0] for x in range(system.members)])
-            y.append([system.location[x][1] for x in range(system.members)])
-        if i % STEP == 0:
-            progress.update(STEP)
-    matplotlib.pyplot.plot(x, y)
-    matplotlib.pyplot.savefig("example2.png")
-
-example1()
