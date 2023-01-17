@@ -1,0 +1,8 @@
+{
+    "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "pyright.completion.importSupport": true,
+    "pyright.completion.snippetSupport": true
+}
