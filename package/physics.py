@@ -1,6 +1,5 @@
 import numpy
 
-
 class physic:
     G = 1.0  # 引力常量1.0
     accuracy = 10**-4  # 精度
