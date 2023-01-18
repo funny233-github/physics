@@ -1,6 +1,4 @@
-import matplotlib.pyplot
 import numpy
-from tqdm import tqdm
 
 
 class physic:
@@ -18,7 +16,7 @@ class physic:
         self.v += a * self.accuracy
 
     def gravitation_acceleration(self):  # 引力加速度函数
-        vector = numpy.zeros([self.members, 2])
+        vector = numpy.zeros([self.members, 3])
         for first_object in range(self.members):
             for second_object in range(first_object + 1, self.members):
                 second_m = self.m[second_object]
@@ -30,7 +28,7 @@ class physic:
         return vector * self.G
 
     def acceleration(self, vector_force):  # (alpha)力替换成加速度
-        acceleration = numpy.zeros([self.members, 2])
+        acceleration = numpy.zeros([self.members, 3])
         for the_object in range(self.members):
             acceleration[the_object] = vector_force()[the_object] / self.m[the_object]
         return acceleration
@@ -43,16 +41,16 @@ class physic:
         return energy
 
     def momentum(self):  # 动量计算
-        vector_momentum = numpy.zeros([self.members, 2])
+        vector_momentum = numpy.zeros([self.members, 3])
         for the_object in range(self.members):
             vector_momentum[the_object] += self.v[the_object] * self.m[the_object]
         return vector_momentum
 
     def modulus(self, vector):  # 向量模计算,vecotr指仅仅含有xy的向量
-        return (vector[0] ** 2 + vector[1] ** 2) ** 0.5
+        return (vector[0] ** 2 + vector[1] ** 2 + vector[2] ** 2) ** 0.5
 
     def center_m(self):  # 质点计算
-        vector_center = numpy.zeros(2)
+        vector_center = numpy.zeros(3)
         M = 0
         for i in range(self.members):
             vector_center += self.m[i] * self.location[i]
