@@ -1,0 +1,56 @@
+name: Rendering
+run-name: 在线渲染
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 需要执行在线渲染的分支、标签或提交哈希值
+        default: master
+        required: true
+        type: string
+      time_tick:
+        description: 需要渲染的时间刻
+        default: "10**1"
+        required: true
+        type: string
+      progress_step:
+        description: 进度条刷新频率
+        default: "10**4"
+        required: true
+        type: string
+
+jobs:
+  render:
+    name: 在线渲染
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: 检出分支
+        uses: actions/checkout@v3
+        with:
+          # 这里需要从手动参数里面获取标识符
+          ref: ${{ inputs.ref }}
+      - name: 安装 Poetry
+        run: pipx install poetry
+      - name: 初始化 Poetry 环境
+        uses: actions/setup-python@v4
+        id: python
+        with:
+          python-version: "3.10"
+          # 这个项目使用了 Poetry 作为依赖管理器
+          cache: "poetry"
+      - name: 重新安装依赖环境
+        if: ${{ steps.python.outputs.cache-hit != 'true' }}
+        run: poetry install --sync
+      - name: 加载自定义配置
+        run: |
+          sed -i '1,$s/time_tick = 10\*\*1/time_tick = ${{ inputs.time_tick }}/g' example.py
+          sed -i '1,$s/STEP = 10\*\*4/STEP = ${{ inputs.progress_step }}/g' example.py
+      - name: 执行渲染
+        run: poetry run python example.py
+      - name: 上传渲染效果图
+        uses: actions/upload-artifact@v3
+        with:
+          name: rendered
+          path: example1.png
