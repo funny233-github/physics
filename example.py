@@ -11,7 +11,7 @@ Z = numpy.array([0.0,0.0,1.0])
 # 参数
 the_location = numpy.array([
     -1.1889693067*X,
-    3.8201881837*X,
+    3.8201881837*X+2*Z,
     -2.631218877*X,
     ])
 the_v = numpy.array([
@@ -25,7 +25,7 @@ x = []
 y = []
 z = []
 
-time_tick = 10**3
+time_tick = 10**2
 the_total = int(time_tick * system.accuracy**-1)
 
 STEP = 10**4
@@ -40,11 +40,12 @@ for i in range(1, the_total + 1):
         z.append([system.location[i][2] for i in range(system.members)])
     if i % STEP == 0:
         progress.update(STEP)
-ax = matplotlib.pyplot.axes(projection = "3d")
-for members in range(system.members):
-    xx = [x[i][members] for i in range(len(x))]
-    yy = [y[i][members] for i in range(len(y))]
-    zz = [z[i][members] for i in range(len(z))]
-    ax.plot3D(xx,yy,zz)
-matplotlib.pyplot.show()
-matplotlib.pyplot.savefig("example1.png")
+numpy.savez("output",x = x,y = y,z = z)
+# ax = matplotlib.pyplot.axes(projection = "3d")
+# for members in range(system.members):
+    # xx = [x[i][members] for i in range(len(x))]
+    # yy = [y[i][members] for i in range(len(y))]
+    # zz = [z[i][members] for i in range(len(z))]
+    # ax.plot3D(xx,yy,zz)
+# matplotlib.pyplot.show()
+# matplotlib.pyplot.savefig("example1.png")
