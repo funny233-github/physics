@@ -25,7 +25,7 @@ x = []
 y = []
 z = []
 
-time_tick = 10**2
+time_tick = 10**3
 the_total = int(time_tick * system.accuracy**-1)
 
 STEP = 10**4
@@ -34,7 +34,7 @@ progress = tqdm(total=the_total, desc="计算轨道", leave=False, unit="tick", 
 for i in range(1, the_total + 1):
     system.tick(system.gravitation_acceleration())
 
-    if i % 10**2 == 0:
+    if i % 10**3 == 0:
         x.append([system.location[i][0] for i in range(system.members)])
         y.append([system.location[i][1] for i in range(system.members)])
         z.append([system.location[i][2] for i in range(system.members)])
