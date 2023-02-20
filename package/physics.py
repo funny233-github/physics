@@ -2,7 +2,7 @@ import numpy
 
 class physic:
     G = 1.0  # 引力常量1.0
-    accuracy = 10**-4  # 精度
+    accuracy = 10**-3/60  # 精度
 
     def __init__(self, location, v, m):  # m质量,location坐标,v速度向量,members对象数量
         self.location = location

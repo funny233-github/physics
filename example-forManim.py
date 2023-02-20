@@ -1,41 +1,43 @@
-import package.physics as physics
+from manim import *
 import numpy
-import matplotlib
-from tqdm import tqdm
-
-# 参数
-the_location = numpy.array(
-    [[-1.1889693067, 0.0], [3.8201881837, 0.0], [-2.631218877, 0.0]]
-)
-the_v = numpy.array([[0.0, 0.8042120498], [0.0, 0.0212794833], [0.0, -0.8254915331]])
-the_m = numpy.array([1.0, 1.0, 1.0])
-system = physics.physic(the_location, the_v, the_m)
-
-x = []
-y = []
-
-time_tick = 10**1
-the_total = int(time_tick * system.accuracy**-1)
-
-STEP = 10**4
+locationRead = numpy.load("output.npz")
+location = []
+for member in range(len(locationRead["x"][0])):
+    members = []
+    for i in range(len(locationRead["x"])):
+        members.append([
+            float(locationRead["x"][i][member]),
+            float(locationRead["y"][i][member]),
+            float(locationRead["z"][i][member])
+            ])
+        print(len(members))
+    location.append(members)
+print(len(location[0]))
 
 class main(Scene):
     def construct(self):
-        the_location = numpy.array(
-            [[-1.1889693067, 0.0], [3.8201881837, 0.0], [-2.631218877, 0.0]]
-        )
-        the_v = numpy.array([[0.0, 0.8042120498], [0.0, 0.0212794833], [0.0, -0.8254915331]])
-        the_m = numpy.array([1.0, 1.0, 1.0])
-        system = physics.physic(the_location, the_v, the_m)
-        
-        x = []
-        y = []
-        
-        time_tick = 10**1
-
-        point1 = Dot(color = BLUE)
-        point2 = Dot(color = RED)
-        point3 = DOT()
-        dt = ValueTracker(0)
-        def update_path(point):
-
+        plane = NumberPlane()
+        self.add(plane)
+        d1,d2,d3 = Dot(color=RED),Dot(color=GREEN),Dot(color=BLUE)
+        value = ValueTracker(0)
+        d1.add_updater(lambda z : z.move_to(
+            location[0][int(value.get_value())]
+            ))
+        d2.add_updater(lambda z : z.move_to(
+            location[1][int(value.get_value())]
+            ))
+        d3.add_updater(lambda z : z.move_to(
+            location[2][int(value.get_value())]
+            ))
+        self.add(d1,d2,d3)
+        # dots = []
+        # for i in range(len(location)-1):
+            # dot = Dot(color=RED)
+            # dot.add_updater(lambda z : z.move_to(
+                # location[i][int(value.get_value())]
+                # ))
+            # dots.append(dot) 
+        # drawDots = VGroup(*dots)
+        # self.add(drawDots)
+        # self.add(d1)
+        self.play(value.animate.set_value(len(locationRead["x"])-1),run_time=10,rate_func=linear)

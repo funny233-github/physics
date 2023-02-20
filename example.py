@@ -11,7 +11,7 @@ Z = numpy.array([0.0,0.0,1.0])
 # 参数
 the_location = numpy.array([
     -1.1889693067*X,
-    3.8201881837*X+2*Z,
+    3.8201881837*X,
     -2.631218877*X,
     ])
 the_v = numpy.array([
@@ -25,10 +25,10 @@ x = []
 y = []
 z = []
 
-time_tick = 10**3
+time_tick = 60
 the_total = int(time_tick * system.accuracy**-1)
 
-STEP = 10**4
+STEP = 10**3
 
 progress = tqdm(total=the_total, desc="计算轨道", leave=False, unit="tick", unit_scale=True)
 for i in range(1, the_total + 1):
