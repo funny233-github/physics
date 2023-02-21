@@ -1,0 +1,62 @@
+name: Manim Rendering
+run-name: Manim 视频渲染
+
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+
+jobs:
+  manim:
+    name: Manim 视频渲染
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出分支
+        uses: actions/checkout@v3
+
+      - name: 安装编译环境
+        run: |
+          # 安装必要的编译构建环境
+          echo "::group::pycairo 构建环境"
+          apt install -y build-essential libcairo2
+          echo "::endgroup::"
+          echo "::group::manimpango 构建环境"
+          apt install -y libpango1.0-dev
+          echo "::endgroup::"
+          echo "::group::FFMpeg 主程序"
+          apt install -y ffmpeg
+          echo "::endgroup::"
+
+      - name: 安装 Poetry
+        run: |
+          # 使用 pipx 完成 Poetry 安装
+          pipx install poetry
+          
+      - name: 初始化 Python3 + Poetry 环境
+        id: poetry
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'poetry'
+
+      - name: 重建虚拟环境
+        if: steps.poetry.outputs.cache-hit != 'true'
+        run: |
+          # 保持 poetry.lock 不变进行安装
+          poetry install --sync
+
+      - name: 执行视频渲染输出
+        run: |
+          poetry run python -m manim -pqk example-forManim.py
+
+      - name: 上传渲染样片
+        uses: actions/upload-artifact@v3
+        with:
+          name: video
+          # 不是很清楚 Manim 的清晰度控制
+          # 我的本地默认环境是 2160p60
+          path: media/videos/example-forManim/*/main.mp4
