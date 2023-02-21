@@ -2,15 +2,16 @@
 name = "physics"
 version = "0.1.0"
 description = "A simple physics simulator for three-body question."
-authors = ["funny233-github"]
+authors = ["funny233-github", "Dragon1573"]
 license = "Proprietary"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.12"
 numpy = "^1.24.1"
 matplotlib = "^3.6.3"
 tqdm = "^4.64.1"
+manim = "^0.17.2"
 
 
 [[tool.poetry.source]]
