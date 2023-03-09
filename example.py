@@ -1,6 +1,7 @@
 import package.physics as physics
 import numpy
 import matplotlib.pyplot
+import random
 from tqdm import tqdm
 from mpl_toolkits import mplot3d
 
@@ -9,17 +10,26 @@ Y = numpy.array([0.0,1.0,0.0])
 Z = numpy.array([0.0,0.0,1.0])
 
 # 参数
+# the_location = numpy.array([
+    # -1.1889693067*X,
+    # 3.8201881837*X,
+    # -2.631218877*X,
+#     ])
 the_location = numpy.array([
-    -1.1889693067*X,
-    3.8201881837*X,
-    -2.631218877*X,
+    random.uniform(1.0,3.0)*X+random.uniform(1.0,3.0)*Y for _ in range(4)
     ])
+# the_v = numpy.array([
+    # 0.8042120498*Y,
+    # 0.0212794833*Y,
+    # -0.8254915331*Y
+#     ])
 the_v = numpy.array([
-    0.8042120498*Y,
-    0.0212794833*Y,
-    -0.8254915331*Y
+    random.uniform(1.0,3.0)*X+random.uniform(1.0,3.0)*Y for _ in range(4)
     ])
-the_m = numpy.array([1.0, 1.0, 1.0])
+# the_m = numpy.array([1.0, 1.0, 1.0])
+the_m = numpy.array([
+    random.uniform(1.0,3.0) for _ in range(4)
+    ])
 system = physics.physic(the_location, the_v, the_m)
 x = []
 y = []
