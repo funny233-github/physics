@@ -1,5 +1,8 @@
-# Created by https://www.toptal.com/developers/gitignore/api/python,virtualenv,visualstudiocode,images
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,virtualenv,visualstudiocode,images
+# Users specified ignore list
+media/
+
+# Created by https://www.toptal.com/developers/gitignore/api/python,virtualenv,visualstudiocode,images,video
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,virtualenv,visualstudiocode,images,video
 
 ### Images ###
 # JPEG
@@ -232,6 +235,26 @@ cython_debug/
 # Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
 poetry.toml
 
+# ruff
+.ruff_cache/
+
+### Video ###
+*.3g2
+*.3gp
+*.asf
+*.asx
+*.avi
+*.flv
+*.mkv
+*.mov
+*.mp4
+*.mpg
+*.ogv
+*.rm
+*.swf
+*.vob
+*.wmv
+*.webm
 
 ### VirtualEnv ###
 # Virtualenv
@@ -264,4 +287,4 @@ pip-selfcheck.json
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/python,virtualenv,visualstudiocode,images
+# End of https://www.toptal.com/developers/gitignore/api/python,virtualenv,visualstudiocode,images,video
